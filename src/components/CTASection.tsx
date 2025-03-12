@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, UserPlus } from "lucide-react";
 import { Link } from 'react-router-dom';
 
 const CTASection = () => {
@@ -23,12 +23,21 @@ const CTASection = () => {
             Join thousands of job seekers who have improved their interview skills and landed their dream jobs.
           </p>
           
-          <Button asChild size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-interview-blue to-interview-purple hover:opacity-90 shadow-lg">
-            <Link to="/mock-interviews">
-              Start Practicing Now
-              <ArrowRight className="ml-2" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-interview-blue to-interview-purple hover:opacity-90 shadow-lg">
+              <Link to="/mock-interviews">
+                Start Practicing Now
+                <ArrowRight className="ml-2" />
+              </Link>
+            </Button>
+            
+            <Button asChild size="lg" variant="outline" className="text-lg px-8 py-6 border-2 shadow-lg">
+              <Link to="/signup">
+                Create Account
+                <UserPlus className="ml-2" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
