@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Timer } from "./Timer";
@@ -6,7 +5,7 @@ import { QuestionDisplay } from "./QuestionDisplay";
 import { VideoFeed } from "./VideoFeed";
 import { ChatInterface } from "./ChatInterface";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronLeft, Menu, X, Info, Pause, Play, Settings } from "lucide-react";
+import { ArrowRight, ChevronLeft, Menu, X, Info, Settings } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 
@@ -19,7 +18,6 @@ interface InterviewRoomProps {
 const InterviewRoom = ({ mode, questions, onComplete }: InterviewRoomProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isTimerComplete, setIsTimerComplete] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   const toggleSidebar = () => {
@@ -43,21 +41,7 @@ const InterviewRoom = ({ mode, questions, onComplete }: InterviewRoomProps) => {
       onComplete();
     }
   };
-  
-  const togglePause = () => {
-    setIsPaused(!isPaused);
-    
-    if (!isPaused) {
-      toast({
-        description: "Interview paused. Take your time and resume when ready.",
-      });
-    } else {
-      toast({
-        description: "Interview resumed. Good luck!",
-      });
-    }
-  };
-  
+
   // Show a welcome message when the interview starts
   useEffect(() => {
     toast({
@@ -79,9 +63,7 @@ const InterviewRoom = ({ mode, questions, onComplete }: InterviewRoomProps) => {
           </h1>
           
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={togglePause}>
-              {isPaused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
-            </Button>
+            
             
             <Dialog>
               <DialogTrigger asChild>
@@ -145,31 +127,10 @@ const InterviewRoom = ({ mode, questions, onComplete }: InterviewRoomProps) => {
             <div className={`${!isSidebarOpen ? 'md:hidden' : ''}`}>
               <QuestionDisplay question={questions[currentQuestionIndex]} />
               
-              <div className="mt-4 flex justify-between items-center">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Info className="h-4 w-4 mr-1" /> Tips
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Interview Tips</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-2 text-sm">
-                      <p>• Be concise and specific in your answers</p>
-                      <p>• Use the STAR method for behavioral questions</p>
-                      <p>• Provide real examples from your experience</p>
-                      <p>• Maintain good posture and eye contact</p>
-                      <p>• Take a moment to think before answering</p>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-                
+              <div className="mt-4 flex justify-end items-center">
                 <Button
-                  className={`bg-gradient-to-r from-interview-blue to-interview-purple hover:opacity-90 transition-all ${isTimerComplete ? 'animate-pulse' : ''}`}
+                  className="bg-gradient-to-r from-interview-blue to-interview-purple hover:opacity-90 transition-all"
                   onClick={handleNextQuestion}
-                  disabled={!isTimerComplete && !isPaused}
                 >
                   Next Question
                   <ArrowRight className="ml-2 h-4 w-4" />

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Camera, CameraOff, Mic, MicOff, Settings, Maximize2 } from "lucide-react";
@@ -104,7 +103,7 @@ export const VideoFeed = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 transition-opacity duration-300 opacity-70 hover:opacity-100">
+      <div className="absolute bottom-4 right-4 flex gap-2 transition-opacity duration-300 opacity-70 hover:opacity-100">
         <Button
           variant="secondary"
           size="icon"
@@ -112,59 +111,6 @@ export const VideoFeed = () => {
           onClick={toggleCamera}
         >
           {isCameraOn ? <CameraOff className="h-4 w-4" /> : <Camera className="h-4 w-4" />}
-        </Button>
-        
-        <Button
-          variant="secondary"
-          size="icon"
-          className={`rounded-full ${isMicOn ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted/80 backdrop-blur-sm'}`}
-          onClick={toggleMicrophone}
-        >
-          {isMicOn ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-        </Button>
-        
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant="secondary"
-              size="icon"
-              className="rounded-full bg-muted/80 backdrop-blur-sm"
-            >
-              <Settings className="h-4 w-4" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Video Settings</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Select Camera</label>
-                <select className="w-full mt-1 bg-background border rounded-md p-2">
-                  <option>Default Camera</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium">Select Microphone</label>
-                <select className="w-full mt-1 bg-background border rounded-md p-2">
-                  <option>Default Microphone</option>
-                </select>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Mirror Video</span>
-                <input type="checkbox" className="toggle" />
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-        
-        <Button
-          variant="secondary"
-          size="icon"
-          className="rounded-full bg-muted/80 backdrop-blur-sm"
-          onClick={toggleFullscreen}
-        >
-          <Maximize2 className="h-4 w-4" />
         </Button>
       </div>
     </div>

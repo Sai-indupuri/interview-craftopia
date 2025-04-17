@@ -9,7 +9,6 @@ interface TimerProps {
 
 export const Timer = ({ duration, onComplete }: TimerProps) => {
   const [timeLeft, setTimeLeft] = useState(duration);
-  const [isPaused, setIsPaused] = useState(false);
 
   // Calculate percentage for the progress ring
   const radius = 16;
@@ -22,14 +21,12 @@ export const Timer = ({ duration, onComplete }: TimerProps) => {
       return;
     }
 
-    if (!isPaused) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
-      }, 1000);
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
 
-      return () => clearInterval(timer);
-    }
-  }, [timeLeft, onComplete, isPaused]);
+    return () => clearInterval(timer);
+  }, [timeLeft, onComplete]);
 
   // Reset timer when duration changes
   useEffect(() => {
@@ -46,16 +43,8 @@ export const Timer = ({ duration, onComplete }: TimerProps) => {
     return "text-interview-blue stroke-interview-blue";
   };
 
-  const togglePause = () => {
-    setIsPaused(prev => !prev);
-  };
-
   return (
-    <div 
-      className="relative inline-flex items-center space-x-2 p-2 rounded-full cursor-pointer hover:bg-background/50 transition-colors"
-      onClick={togglePause}
-      title={isPaused ? "Resume timer" : "Pause timer"}
-    >
+    <div className="relative inline-flex items-center space-x-2 p-2 rounded-full">
       <svg width="40" height="40" viewBox="0 0 44 44" className={`${getColor()} transform -rotate-90`}>
         <circle 
           cx="22" cy="22" r={radius}
@@ -80,12 +69,6 @@ export const Timer = ({ duration, onComplete }: TimerProps) => {
           {minutes}:{seconds.toString().padStart(2, '0')}
         </span>
       </div>
-      
-      {isPaused && (
-        <span className="text-xs font-medium text-muted-foreground animate-pulse">
-          Paused
-        </span>
-      )}
     </div>
   );
 };
