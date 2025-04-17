@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FileText, Users, Code, BrainCircuit, Video, MessageSquare, Clock } from "lucide-react";
+import InterviewRoom from '@/components/interview/InterviewRoom';
 
 const interviewTypes = [
   {
@@ -51,18 +51,34 @@ const MockInterviews = () => {
   const [selectedMode, setSelectedMode] = useState("video");
   const [resume, setResume] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const [isInterviewStarted, setIsInterviewStarted] = useState(false);
+
+  const sampleQuestions = [
+    "Tell me about yourself and your experience.",
+    "What are your greatest strengths and weaknesses?",
+    "Where do you see yourself in 5 years?",
+    "Why do you want to work for our company?",
+    "Describe a challenging situation at work and how you handled it."
+  ];
 
   const handleStartInterview = () => {
-    // Would implement actual interview starting logic here
-    console.log({
-      type: selectedType,
-      duration: selectedDuration,
-      mode: selectedMode,
-      resume,
-      jobDescription
-    });
-    alert("Interview would start here with the selected configuration!");
+    setIsInterviewStarted(true);
   };
+
+  const handleInterviewComplete = () => {
+    setIsInterviewStarted(false);
+    console.log("Interview completed");
+  };
+
+  if (isInterviewStarted) {
+    return (
+      <InterviewRoom
+        mode={selectedMode as "video" | "chat"}
+        questions={sampleQuestions}
+        onComplete={handleInterviewComplete}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
