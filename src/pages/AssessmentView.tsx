@@ -1,4 +1,3 @@
-
 // Import the components and hooks
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -308,7 +307,9 @@ const AssessmentView = () => {
                   />
                   
                   <AssessmentTimer 
-                    time={timeRemaining}
+                    timeInSeconds={timeRemaining}
+                    isPaused={false}
+                    onTimeUpdate={setTimeRemaining}
                     onComplete={handleTimeUp}
                   />
                   

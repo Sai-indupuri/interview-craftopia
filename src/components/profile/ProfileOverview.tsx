@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
@@ -85,19 +85,20 @@ const ProfileOverview = () => {
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig} className="h-80">
-            {/* Wrap the multiple children in a single React element */}
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="score" fill="#9b87f5" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-            <ChartLegend>
-              <ChartLegendContent />
-            </ChartLegend>
+            <Fragment>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={performanceData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="score" fill="#9b87f5" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+              <ChartLegend>
+                <ChartLegendContent />
+              </ChartLegend>
+            </Fragment>
           </ChartContainer>
         </CardContent>
       </Card>
