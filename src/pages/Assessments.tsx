@@ -1,185 +1,15 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BrainCircuit, ChevronRight, Clock, FileText, BarChart, GraduationCap, BookOpen, BookText, FileBadge, Scale, Stethoscope, Share2 } from "lucide-react";
+import { ChevronRight, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-// All assessment categories
-const assessmentCategories = [
-  {
-    id: "tech",
-    label: "Technology",
-    assessments: [
-      {
-        title: "Data Structures & Algorithms",
-        description: "Test your knowledge of arrays, linked lists, trees, sorting algorithms, etc.",
-        icon: BrainCircuit,
-        time: "45 min",
-        questions: 25,
-        color: "bg-interview-blue/10 text-interview-blue"
-      },
-      {
-        title: "Database Systems",
-        description: "SQL queries, database design, normalization, indexing, and transactions.",
-        icon: BarChart,
-        time: "30 min",
-        questions: 20,
-        color: "bg-interview-purple/10 text-interview-purple"
-      },
-      {
-        title: "System Design",
-        description: "Architecture, scalability, microservices, caching, load balancing.",
-        icon: FileText,
-        time: "60 min",
-        questions: 15,
-        color: "bg-interview-teal/10 text-interview-teal"
-      },
-      {
-        title: "Operating Systems",
-        description: "Processes, threads, memory management, file systems, and scheduling.",
-        icon: BrainCircuit,
-        time: "30 min",
-        questions: 20,
-        color: "bg-interview-blue/10 text-interview-blue"
-      },
-      {
-        title: "Computer Networks",
-        description: "TCP/IP, HTTP, DNS, network security, and socket programming.",
-        icon: BarChart,
-        time: "45 min",
-        questions: 25,
-        color: "bg-interview-purple/10 text-interview-purple"
-      },
-      {
-        title: "General Aptitude",
-        description: "Logical reasoning, quantitative aptitude, and verbal ability.",
-        icon: FileText,
-        time: "30 min",
-        questions: 30,
-        color: "bg-interview-teal/10 text-interview-teal"
-      }
-    ]
-  },
-  {
-    id: "civil-services",
-    label: "Civil Services",
-    assessments: [
-      {
-        title: "UPSC Prelims - General Studies",
-        description: "Based on last 10 years' question papers on current affairs, history, geography, economics.",
-        icon: BookOpen,
-        time: "120 min",
-        questions: 100,
-        color: "bg-interview-blue/10 text-interview-blue"
-      },
-      {
-        title: "UPSC Prelims - CSAT",
-        description: "Comprehension, logical reasoning, analytical ability, and basic numeracy.",
-        icon: BrainCircuit, 
-        time: "120 min",
-        questions: 80,
-        color: "bg-interview-purple/10 text-interview-purple"
-      },
-      {
-        title: "Indian Constitution & Polity",
-        description: "Constitutional framework, amendments, governance, and political system of India.",
-        icon: Scale,
-        time: "60 min",
-        questions: 50,
-        color: "bg-interview-teal/10 text-interview-teal"
-      },
-      {
-        title: "Indian & World Geography",
-        description: "Physical, social, and economic geography of India and the world.",
-        icon: GraduationCap,
-        time: "45 min",
-        questions: 40,
-        color: "bg-interview-blue/10 text-interview-blue"
-      },
-      {
-        title: "Indian History & Culture",
-        description: "Ancient, medieval, modern history, and cultural heritage of India.",
-        icon: BookText,
-        time: "60 min",
-        questions: 50,
-        color: "bg-interview-purple/10 text-interview-purple"
-      },
-      {
-        title: "Economy & International Relations",
-        description: "Economic concepts, Indian economy, and foreign relations.",
-        icon: Share2,
-        time: "45 min",
-        questions: 40,
-        color: "bg-interview-teal/10 text-interview-teal"
-      }
-    ]
-  },
-  {
-    id: "banking",
-    label: "Banking",
-    assessments: [
-      {
-        title: "Banking Awareness",
-        description: "Banking history, institutions, financial policies, and current banking trends.",
-        icon: FileBadge,
-        time: "30 min",
-        questions: 40,
-        color: "bg-interview-blue/10 text-interview-blue"
-      },
-      {
-        title: "Quantitative Aptitude",
-        description: "Mathematical problems relevant to banking exams like SBI, IBPS, RBI.",
-        icon: BrainCircuit,
-        time: "45 min",
-        questions: 35,
-        color: "bg-interview-purple/10 text-interview-purple"
-      },
-      {
-        title: "Reasoning Ability",
-        description: "Logical reasoning, analytical reasoning, and verbal reasoning for banking exams.",
-        icon: FileText,
-        time: "45 min",
-        questions: 35,
-        color: "bg-interview-teal/10 text-interview-teal"
-      }
-    ]
-  },
-  {
-    id: "healthcare",
-    label: "Healthcare",
-    assessments: [
-      {
-        title: "Medical Terminology",
-        description: "Common medical terms, abbreviations, and definitions for healthcare professionals.",
-        icon: Stethoscope,
-        time: "30 min",
-        questions: 50,
-        color: "bg-interview-blue/10 text-interview-blue"
-      },
-      {
-        title: "Anatomy & Physiology",
-        description: "Human body systems, functions, and anatomical structures.",
-        icon: BrainCircuit,
-        time: "45 min",
-        questions: 60,
-        color: "bg-interview-purple/10 text-interview-purple"
-      },
-      {
-        title: "Patient Care & Ethics",
-        description: "Medical ethics, patient communication, and healthcare standards.",
-        icon: FileText,
-        time: "30 min",
-        questions: 40,
-        color: "bg-interview-teal/10 text-interview-teal"
-      }
-    ]
-  }
-];
+import { assessmentCategories } from '@/data/assessmentData'; 
 
 const Assessments = () => {
   const [selectedCategory, setSelectedCategory] = useState("tech");
@@ -193,6 +23,11 @@ const Assessments = () => {
       assessment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       assessment.description.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
+
+  // Function to create URL-friendly assessment title
+  const createAssessmentUrl = (title: string) => {
+    return title.toLowerCase().replace(/\s+/g, '-');
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -298,7 +133,7 @@ const Assessments = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center text-muted-foreground">
                           <Clock size={16} className="mr-1" />
-                          <span>{assessment.time}</span>
+                          <span>{assessment.time} min</span>
                         </div>
                         <div className="text-muted-foreground">
                           {assessment.questions} questions
@@ -306,10 +141,15 @@ const Assessments = () => {
                       </div>
                     </CardContent>
                     <CardFooter>
-                      <Button className="w-full group">
-                        Start Assessment
-                        <ChevronRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
+                      <Link 
+                        to={`/assessment/${selectedCategory}/${createAssessmentUrl(assessment.title)}`} 
+                        className="w-full"
+                      >
+                        <Button className="w-full group">
+                          Start Assessment
+                          <ChevronRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
                     </CardFooter>
                   </Card>
                 ))}

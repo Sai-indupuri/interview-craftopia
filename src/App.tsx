@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import MockInterviews from "./pages/MockInterviews";
 import CodingPractice from "./pages/CodingPractice";
 import Assessments from "./pages/Assessments";
+import AssessmentView from "./pages/AssessmentView";
+import AssessmentResults from "./pages/AssessmentResults";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/mock-interviews" element={<MockInterviews />} />
           <Route path="/coding-practice" element={<CodingPractice />} />
           <Route path="/assessments" element={<Assessments />} />
+          <Route path="/assessment/:categoryId/:assessmentTitle" element={<AssessmentView />} />
+          <Route path="/assessment-results/:categoryId/:assessmentTitle" element={<AssessmentResults />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
