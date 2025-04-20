@@ -57,6 +57,7 @@ const AssessmentView = () => {
   const [assessmentCompleted, setAssessmentCompleted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(3600); // 1 hour in seconds
   const [showHelp, setShowHelp] = useState(false);
+  const [flaggedQuestions, setFlaggedQuestions] = useState<number[]>([]);
   
   // Sample questions - in a real app, this would come from an API
   const questions: Question[] = [
@@ -174,16 +175,16 @@ const AssessmentView = () => {
   };
   
   // Handle MCQ answer selection
-  const handleMCQAnswerSelect = (questionId: number, optionId: string) => {
+  const handleMCQAnswerSelect = (optionId: string) => {
     setAnswers(prev => prev.map(a => 
-      a.questionId === questionId ? { ...a, selectedOption: optionId } : a
+      a.questionId === currentQuestion?.id ? { ...a, selectedOption: optionId } : a
     ));
   };
   
   // Handle theory answer input
-  const handleTheoryAnswerChange = (questionId: number, text: string) => {
+  const handleTheoryAnswerChange = (text: string) => {
     setAnswers(prev => prev.map(a => 
-      a.questionId === questionId ? { ...a, textAnswer: text } : a
+      a.questionId === currentQuestion?.id ? { ...a, textAnswer: text } : a
     ));
   };
   
@@ -221,6 +222,11 @@ const AssessmentView = () => {
   
   // Get current answer
   const currentAnswer = answers.find(a => a.questionId === currentQuestion?.id);
+  
+  // Check if current question has an answer
+  const hasAnswer = currentQuestion?.type === "mcq" 
+    ? !!currentAnswer?.selectedOption 
+    : !!(currentAnswer?.textAnswer && currentAnswer.textAnswer.trim() !== "");
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -290,13 +296,16 @@ const AssessmentView = () => {
                   <AssessmentNav 
                     questions={questions}
                     currentIndex={currentQuestionIndex}
-                    answers={answers}
-                    onQuestionSelect={goToQuestion}
+                    userAnswers={answers.reduce((acc, answer) => {
+                      return { ...acc, [answer.questionId]: answer };
+                    }, {})}
+                    flaggedQuestions={flaggedQuestions}
+                    onSelectQuestion={goToQuestion}
                   />
                   
                   <AssessmentTimer 
-                    initialTime={timeRemaining}
-                    onTimeUp={handleTimeUp}
+                    time={timeRemaining}
+                    onComplete={handleTimeUp}
                   />
                   
                   <button
@@ -323,15 +332,15 @@ const AssessmentView = () => {
                   {currentQuestion?.type === "mcq" && (
                     <AssessmentMCQ 
                       question={currentQuestion as MCQQuestion}
-                      selectedOption={currentAnswer?.selectedOption}
-                      onOptionSelect={handleMCQAnswerSelect}
+                      selectedAnswer={currentAnswer?.selectedOption}
+                      onAnswerSelect={handleMCQAnswerSelect}
                     />
                   )}
                   
                   {currentQuestion?.type === "theory" && (
                     <AssessmentTheory 
                       question={currentQuestion as TheoryQuestion}
-                      answer={currentAnswer?.textAnswer || ""}
+                      userAnswer={currentAnswer?.textAnswer || ""}
                       onAnswerChange={handleTheoryAnswerChange}
                     />
                   )}
@@ -342,7 +351,8 @@ const AssessmentView = () => {
                   isLastQuestion={currentQuestionIndex === questions.length - 1}
                   onPrevious={goToPreviousQuestion}
                   onNext={goToNextQuestion}
-                  onSubmit={handleSubmitAssessment}
+                  onComplete={handleSubmitAssessment}
+                  hasAnswer={hasAnswer}
                 />
               </div>
             </div>
@@ -351,7 +361,7 @@ const AssessmentView = () => {
         
         {/* Help Dialog */}
         {showHelp && (
-          <AssessmentHelp onClose={() => setShowHelp(false)} />
+          <AssessmentHelp isOpen={showHelp} onClose={() => setShowHelp(false)} />
         )}
       </main>
       

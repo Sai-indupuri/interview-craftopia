@@ -3,7 +3,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   User, Settings, BookOpen, Video, BarChart2, 
-  PieChart, FileText
+  PieChart, FileText, Bell
 } from 'lucide-react';
 
 interface ProfileSidebarProps {
@@ -19,6 +19,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ activeTab, setActiveTab
     { id: 'assessment-reports', label: 'Assessment Reports', icon: FileText },
     { id: 'mock-interviews', label: 'Mock Interviews', icon: Video },
     { id: 'account-settings', label: 'Account Settings', icon: Settings },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
   ];
 
   return (

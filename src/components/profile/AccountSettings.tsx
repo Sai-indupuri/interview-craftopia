@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Globe, Shield, CreditCard, Settings, Moon, Sun } from 'lucide-react';
+import { Lock, Globe, Shield, CreditCard, Settings, Moon, Sun, Bell } from 'lucide-react';
 
 const AccountSettings = () => {
   const { toast } = useToast();
