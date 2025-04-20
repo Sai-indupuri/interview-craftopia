@@ -12,6 +12,8 @@ import AssessmentView from "./pages/AssessmentView";
 import AssessmentResults from "./pages/AssessmentResults";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Support from "./pages/Support";
+import CustomAssessments from "./pages/CustomAssessments";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
           <Route path="/assessment-results/:categoryId/:assessmentTitle" element={<AssessmentResults />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/custom-assessments" element={<CustomAssessments />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

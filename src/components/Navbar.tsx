@@ -65,6 +65,13 @@ const Navbar = () => {
                       <span>{item.name}</span>
                     </Link>
                   ))}
+                  <Link 
+                    to="/custom-assessments"
+                    className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
+                  >
+                    <ClipboardCheck size={18} />
+                    <span>Custom Assessments</span>
+                  </Link>
                 </div>
               </SheetContent>
             </Sheet>
@@ -81,6 +88,13 @@ const Navbar = () => {
                 <span>{item.name}</span>
               </Link>
             ))}
+            <Link 
+              to="/custom-assessments"
+              className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
+            >
+              <ClipboardCheck size={16} />
+              <span>Custom Assessments</span>
+            </Link>
             <Button 
               variant="ghost" 
               size="icon"
