@@ -85,6 +85,7 @@ const ProfileOverview = () => {
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig} className="h-80">
+            {/* Wrap the multiple children in a single React element */}
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={performanceData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -128,10 +129,6 @@ const ProfileOverview = () => {
                   <Progress 
                     value={assessment.score} 
                     className="w-24 h-2" 
-                    fill={
-                      assessment.score >= 80 ? 'rgb(22, 163, 74)' : 
-                      assessment.score >= 60 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)'
-                    } 
                   />
                 </div>
               </div>

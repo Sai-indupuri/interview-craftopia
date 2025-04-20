@@ -28,7 +28,8 @@ interface MCQQuestion {
   explanation: string;
 }
 
-interface TheoryQuestion {
+// Define our own TheoryQuestion interface to avoid conflicts
+interface AssessmentTheoryQuestion {
   id: number;
   type: "theory";
   text: string;
@@ -36,7 +37,7 @@ interface TheoryQuestion {
   expectedAnswer?: string;
 }
 
-type Question = MCQQuestion | TheoryQuestion;
+type Question = MCQQuestion | AssessmentTheoryQuestion;
 
 interface Answer {
   questionId: number;
@@ -228,6 +229,11 @@ const AssessmentView = () => {
     ? !!currentAnswer?.selectedOption 
     : !!(currentAnswer?.textAnswer && currentAnswer.textAnswer.trim() !== "");
   
+  // Transform answers for AssessmentNav component to match expected format
+  const userAnswers = answers.reduce((acc, answer) => {
+    return { ...acc, [answer.questionId]: answer };
+  }, {});
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -296,9 +302,7 @@ const AssessmentView = () => {
                   <AssessmentNav 
                     questions={questions}
                     currentIndex={currentQuestionIndex}
-                    userAnswers={answers.reduce((acc, answer) => {
-                      return { ...acc, [answer.questionId]: answer };
-                    }, {})}
+                    userAnswers={userAnswers}
                     flaggedQuestions={flaggedQuestions}
                     onSelectQuestion={goToQuestion}
                   />
@@ -339,7 +343,11 @@ const AssessmentView = () => {
                   
                   {currentQuestion?.type === "theory" && (
                     <AssessmentTheory 
-                      question={currentQuestion as TheoryQuestion}
+                      question={{
+                        ...currentQuestion as AssessmentTheoryQuestion,
+                        expectedAnswer: (currentQuestion as AssessmentTheoryQuestion).expectedAnswer || '',
+                        wordLimit: (currentQuestion as AssessmentTheoryQuestion).wordLimit || 150
+                      }}
                       userAnswer={currentAnswer?.textAnswer || ""}
                       onAnswerChange={handleTheoryAnswerChange}
                     />
