@@ -9,7 +9,225 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      assessment_attempts: {
+        Row: {
+          answers: Json | null
+          assessment_title: string
+          category_id: string
+          created_at: string
+          end_time: string | null
+          id: string
+          score: number | null
+          start_time: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          assessment_title: string
+          category_id: string
+          created_at?: string
+          end_time?: string | null
+          id?: string
+          score?: number | null
+          start_time?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          assessment_title?: string
+          category_id?: string
+          created_at?: string
+          end_time?: string | null
+          id?: string
+          score?: number | null
+          start_time?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      custom_assessment_requests: {
+        Row: {
+          contact_email: string
+          contact_phone: string | null
+          created_at: string
+          delivery_date: string | null
+          description: string
+          domain: string
+          features: string[] | null
+          id: string
+          org_name: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_email: string
+          contact_phone?: string | null
+          created_at?: string
+          delivery_date?: string | null
+          description: string
+          domain: string
+          features?: string[] | null
+          id?: string
+          org_name: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact_email?: string
+          contact_phone?: string | null
+          created_at?: string
+          delivery_date?: string | null
+          description?: string
+          domain?: string
+          features?: string[] | null
+          id?: string
+          org_name?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mock_interviews: {
+        Row: {
+          created_at: string
+          date: string
+          domain: string
+          duration: string
+          feedback: Json | null
+          id: string
+          interview_type: string
+          job_description: string | null
+          mode: string
+          resume_data: string | null
+          score: number | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          domain: string
+          duration: string
+          feedback?: Json | null
+          id?: string
+          interview_type: string
+          job_description?: string | null
+          mode: string
+          resume_data?: string | null
+          score?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          domain?: string
+          duration?: string
+          feedback?: Json | null
+          id?: string
+          interview_type?: string
+          job_description?: string | null
+          mode?: string
+          resume_data?: string | null
+          score?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          about: string | null
+          aspiring_role: string | null
+          company: string | null
+          created_at: string
+          domain: string | null
+          education: string | null
+          email: string | null
+          experience: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role_title: string | null
+          skills: string | null
+          updated_at: string
+        }
+        Insert: {
+          about?: string | null
+          aspiring_role?: string | null
+          company?: string | null
+          created_at?: string
+          domain?: string | null
+          education?: string | null
+          email?: string | null
+          experience?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          role_title?: string | null
+          skills?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about?: string | null
+          aspiring_role?: string | null
+          company?: string | null
+          created_at?: string
+          domain?: string | null
+          education?: string | null
+          email?: string | null
+          experience?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role_title?: string | null
+          skills?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          message: string
+          status: string | null
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          message: string
+          status?: string | null
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          message?: string
+          status?: string | null
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
