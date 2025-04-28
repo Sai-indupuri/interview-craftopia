@@ -1,36 +1,26 @@
 
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "./apiClient";
 import { Database } from "@/integrations/supabase/types";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export async function getUserProfile() {
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) throw new Error('Not authenticated');
-  
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-
-  if (error) throw error;
-  return data;
+  return api.get<Profile>('profile');
 }
 
 export async function updateUserProfile(updates: Partial<Profile>) {
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) throw new Error('Not authenticated');
-  
-  const { data, error } = await supabase
-    .from('profiles')
-    .update(updates)
-    .eq('id', user.id)
-    .select()
-    .single();
+  return api.put<Profile>('profile', updates);
+}
 
-  if (error) throw error;
-  return data;
+export async function uploadProfileImage(file: File) {
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  return fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api"}/profile/image`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    }
+  }).then(res => res.json());
 }

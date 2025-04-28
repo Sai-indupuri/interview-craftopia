@@ -1,48 +1,30 @@
 
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "./apiClient";
 import { Database } from "@/integrations/supabase/types";
 
 type MockInterview = Database["public"]["Tables"]["mock_interviews"]["Row"];
 type MockInterviewInsert = Database["public"]["Tables"]["mock_interviews"]["Insert"];
 
 export async function createMockInterview(interview: Omit<MockInterviewInsert, "id" | "created_at" | "updated_at">) {
-  const { data, error } = await supabase
-    .from('mock_interviews')
-    .insert(interview)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
+  return api.post<MockInterview>('interviews', interview);
 }
 
 export async function getUserMockInterviews() {
-  const { data, error } = await supabase
-    .from('mock_interviews')
-    .select('*')
-    .order('created_at', { ascending: false });
+  return api.get<MockInterview[]>('interviews');
+}
 
-  if (error) throw error;
-  return data;
+export async function getMockInterview(id: string) {
+  return api.get<MockInterview>(`interviews/${id}`);
 }
 
 export async function updateMockInterview(id: string, updates: Partial<MockInterview>) {
-  const { data, error } = await supabase
-    .from('mock_interviews')
-    .update(updates)
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
+  return api.put<MockInterview>(`interviews/${id}`, updates);
 }
 
 export async function deleteMockInterview(id: string) {
-  const { error } = await supabase
-    .from('mock_interviews')
-    .delete()
-    .eq('id', id);
+  return api.delete<void>(`interviews/${id}`);
+}
 
-  if (error) throw error;
+export async function submitInterviewFeedback(id: string, feedback: any) {
+  return api.post<MockInterview>(`interviews/${id}/feedback`, { feedback });
 }

@@ -1,39 +1,26 @@
 
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "./apiClient";
 import { Database } from "@/integrations/supabase/types";
 
 type CustomAssessment = Database["public"]["Tables"]["custom_assessment_requests"]["Row"];
 type CustomAssessmentInsert = Database["public"]["Tables"]["custom_assessment_requests"]["Insert"];
 
 export async function createCustomAssessmentRequest(request: Omit<CustomAssessmentInsert, "id" | "created_at" | "updated_at">) {
-  const { data, error } = await supabase
-    .from('custom_assessment_requests')
-    .insert(request)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
+  return api.post<CustomAssessment>('custom-assessments', request);
 }
 
 export async function getUserCustomAssessments() {
-  const { data, error } = await supabase
-    .from('custom_assessment_requests')
-    .select('*')
-    .order('created_at', { ascending: false });
+  return api.get<CustomAssessment[]>('custom-assessments');
+}
 
-  if (error) throw error;
-  return data;
+export async function getCustomAssessment(id: string) {
+  return api.get<CustomAssessment>(`custom-assessments/${id}`);
 }
 
 export async function updateCustomAssessment(id: string, updates: Partial<CustomAssessment>) {
-  const { data, error } = await supabase
-    .from('custom_assessment_requests')
-    .update(updates)
-    .eq('id', id)
-    .select()
-    .single();
+  return api.put<CustomAssessment>(`custom-assessments/${id}`, updates);
+}
 
-  if (error) throw error;
-  return data;
+export async function deleteCustomAssessment(id: string) {
+  return api.delete<void>(`custom-assessments/${id}`);
 }
