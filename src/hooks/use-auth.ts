@@ -69,3 +69,13 @@ export function useSignOut() {
     }
   });
 }
+
+export function useIsCompany() {
+  const { data: user } = useCurrentUser();
+  return user?.accountType === 'company';
+}
+
+export function useIsIndividual() {
+  const { data: user } = useCurrentUser();
+  return user?.accountType === 'individual';
+}

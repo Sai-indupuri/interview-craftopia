@@ -6,6 +6,7 @@ interface AuthUser {
   email: string;
   firstName?: string;
   lastName?: string;
+  accountType: 'individual' | 'company';
 }
 
 interface SignInCredentials {
@@ -18,6 +19,8 @@ interface SignUpCredentials {
   password: string;
   firstName?: string;
   lastName?: string;
+  accountType: 'individual' | 'company';
+  companyName?: string;
 }
 
 interface AuthResponse {

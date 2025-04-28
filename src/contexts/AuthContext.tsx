@@ -7,10 +7,11 @@ import { useToast } from '@/components/ui/use-toast';
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, accountType: 'individual' | 'company', companyName?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   loading: boolean;
+  accountType: 'individual' | 'company' | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,6 +20,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [accountType, setAccountType] = useState<'individual' | 'company' | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -26,6 +28,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Get the account type from user metadata
+          const userAccountType = session.user.user_metadata?.account_type as 'individual' | 'company';
+          setAccountType(userAccountType || null);
+        } else {
+          setAccountType(null);
+        }
+        
         setLoading(false);
       }
     );
@@ -33,15 +44,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        // Get the account type from user metadata
+        const userAccountType = session.user.user_metadata?.account_type as 'individual' | 'company';
+        setAccountType(userAccountType || null);
+      }
+      
       setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, accountType: 'individual' | 'company', companyName?: string) => {
     try {
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+          data: {
+            account_type: accountType,
+            company_name: companyName || null
+          }
+        }
+      });
       if (error) throw error;
       toast({
         title: "Sign up successful!",
@@ -94,7 +121,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, signUp, signIn, signOut, loading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      signUp, 
+      signIn, 
+      signOut, 
+      loading,
+      accountType
+    }}>
       {children}
     </AuthContext.Provider>
   );

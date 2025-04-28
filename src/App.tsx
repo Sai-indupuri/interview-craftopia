@@ -18,6 +18,8 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import CompanyProfile from "./pages/CompanyProfile";
+import CompanyDashboard from "./pages/CompanyDashboard";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +88,23 @@ const App = () => (
               element={
                 <RequireAuth>
                   <CustomAssessments />
+                </RequireAuth>
+              } 
+            />
+            {/* Company routes */}
+            <Route 
+              path="/company-profile" 
+              element={
+                <RequireAuth>
+                  <CompanyProfile />
+                </RequireAuth>
+              } 
+            />
+            <Route 
+              path="/company-dashboard" 
+              element={
+                <RequireAuth>
+                  <CompanyDashboard />
                 </RequireAuth>
               } 
             />
