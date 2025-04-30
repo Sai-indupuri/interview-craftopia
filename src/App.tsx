@@ -17,7 +17,6 @@ import CustomAssessments from "./pages/CustomAssessments";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { RequireAuth } from "@/components/auth/RequireAuth";
 import CompanyProfile from "./pages/CompanyProfile";
 import CompanyDashboard from "./pages/CompanyDashboard";
 
@@ -33,81 +32,17 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route 
-              path="/mock-interviews" 
-              element={
-                <RequireAuth>
-                  <MockInterviews />
-                </RequireAuth>
-              } 
-            />
-            <Route 
-              path="/coding-practice" 
-              element={
-                <RequireAuth>
-                  <CodingPractice />
-                </RequireAuth>
-              } 
-            />
-            <Route 
-              path="/assessments" 
-              element={
-                <RequireAuth>
-                  <Assessments />
-                </RequireAuth>
-              } 
-            />
-            <Route 
-              path="/assessment/:categoryId/:assessmentTitle" 
-              element={
-                <RequireAuth>
-                  <AssessmentView />
-                </RequireAuth>
-              } 
-            />
-            <Route 
-              path="/assessment-results/:categoryId/:assessmentTitle" 
-              element={
-                <RequireAuth>
-                  <AssessmentResults />
-                </RequireAuth>
-              } 
-            />
+            <Route path="/mock-interviews" element={<MockInterviews />} />
+            <Route path="/coding-practice" element={<CodingPractice />} />
+            <Route path="/assessments" element={<Assessments />} />
+            <Route path="/assessment/:categoryId/:assessmentTitle" element={<AssessmentView />} />
+            <Route path="/assessment-results/:categoryId/:assessmentTitle" element={<AssessmentResults />} />
             <Route path="/signup" element={<Signup />} />
-            <Route 
-              path="/profile" 
-              element={
-                <RequireAuth>
-                  <Profile />
-                </RequireAuth>
-              } 
-            />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/support" element={<Support />} />
-            <Route 
-              path="/custom-assessments" 
-              element={
-                <RequireAuth>
-                  <CustomAssessments />
-                </RequireAuth>
-              } 
-            />
-            {/* Company routes */}
-            <Route 
-              path="/company-profile" 
-              element={
-                <RequireAuth>
-                  <CompanyProfile />
-                </RequireAuth>
-              } 
-            />
-            <Route 
-              path="/company-dashboard" 
-              element={
-                <RequireAuth>
-                  <CompanyDashboard />
-                </RequireAuth>
-              } 
-            />
+            <Route path="/custom-assessments" element={<CustomAssessments />} />
+            <Route path="/company-profile" element={<CompanyProfile />} />
+            <Route path="/company-dashboard" element={<CompanyDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

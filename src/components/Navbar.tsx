@@ -17,28 +17,17 @@ const Navbar = () => {
     document.documentElement.classList.toggle('dark');
   };
 
-  // Navigation items for individual users
-  const individualNavItems = [
+  // Combined navigation items for all users
+  const navItems = [
     { name: "Home", path: "/", icon: Home },
     { name: "Mock Interviews", path: "/mock-interviews", icon: ClipboardCheck },
     { name: "Coding Practice", path: "/coding-practice", icon: Code },
     { name: "Assessments", path: "/assessments", icon: ClipboardCheck },
     { name: "Profile", path: "/profile", icon: User },
-    { name: "Support", path: "/support", icon: LifeBuoy },
-  ];
-
-  // Navigation items for company users
-  const companyNavItems = [
-    { name: "Home", path: "/", icon: Home },
     { name: "Company Dashboard", path: "/company-dashboard", icon: Briefcase },
     { name: "Custom Assessments", path: "/custom-assessments", icon: ClipboardCheck },
-    { name: "Interview Programs", path: "/interview-programs", icon: ClipboardCheck },
-    { name: "Company Profile", path: "/company-profile", icon: User },
     { name: "Support", path: "/support", icon: LifeBuoy },
   ];
-
-  // Select the appropriate navigation items based on account type
-  const navItems = accountType === 'company' ? companyNavItems : individualNavItems;
 
   return (
     <nav className="sticky top-0 z-50 w-full py-3 backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800">
@@ -65,30 +54,29 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent>
                 <div className="mt-8 flex flex-col gap-4">
+                  {navItems.map((item) => (
+                    <Link 
+                      key={item.name} 
+                      to={item.path}
+                      className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
+                    >
+                      <item.icon size={18} />
+                      <span>{item.name}</span>
+                    </Link>
+                  ))}
+                  
                   {user ? (
-                    <>
-                      {navItems.map((item) => (
-                        <Link 
-                          key={item.name} 
-                          to={item.path}
-                          className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
-                        >
-                          <item.icon size={18} />
-                          <span>{item.name}</span>
-                        </Link>
-                      ))}
-                      <button
-                        onClick={() => signOut()}
-                        className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors mt-4"
-                      >
-                        <LogOut size={18} />
-                        <span>Sign Out</span>
-                      </button>
-                    </>
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors mt-4"
+                    >
+                      <LogOut size={18} />
+                      <span>Sign Out</span>
+                    </button>
                   ) : (
                     <Link 
                       to="/auth"
-                      className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors mt-4"
                     >
                       <User size={18} />
                       <span>Sign In / Sign Up</span>
@@ -100,52 +88,46 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="flex items-center gap-6">
+            {navItems.map((item) => (
+              <Link 
+                key={item.name} 
+                to={item.path}
+                className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
+              >
+                <item.icon size={16} />
+                <span>{item.name}</span>
+              </Link>
+            ))}
+            
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={toggleDarkMode}
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </Button>
+            
             {user ? (
-              <>
-                {navItems.map((item) => (
-                  <Link 
-                    key={item.name} 
-                    to={item.path}
-                    className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
-                  >
-                    <item.icon size={16} />
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={toggleDarkMode}
-                >
-                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => signOut()}
+                className="flex items-center gap-1"
+              >
+                <LogOut size={16} />
+                <span>Sign Out</span>
+              </Button>
+            ) : (
+              <Link to="/auth">
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => signOut()}
                   className="flex items-center gap-1"
-                >
-                  <LogOut size={16} />
-                  <span>Sign Out</span>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link 
-                  to="/auth"
-                  className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
                 >
                   <User size={16} />
                   <span>Sign In / Sign Up</span>
-                </Link>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={toggleDarkMode}
-                >
-                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
                 </Button>
-              </>
+              </Link>
             )}
           </div>
         )}
