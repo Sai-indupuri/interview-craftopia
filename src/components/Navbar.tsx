@@ -21,11 +21,9 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
   Menu, 
-  Home, 
   Code, 
   ClipboardCheck, 
   User, 
-  LifeBuoy, 
   Moon, 
   Sun, 
   Briefcase, 
@@ -119,14 +117,6 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent>
                 <div className="mt-8 flex flex-col gap-4">
-                  <Link 
-                    to="/"
-                    className="flex items-center gap-2 px-4 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
-                  >
-                    <Home size={18} />
-                    <span>Home</span>
-                  </Link>
-                  
                   {/* Mock Interviews */}
                   <div className="flex flex-col">
                     <Link 
@@ -199,32 +189,6 @@ const Navbar = () => {
                     </Link>
                   </div>
                   
-                  {/* Resources */}
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2 px-4 py-2 text-foreground">
-                      <LifeBuoy size={18} />
-                      <span>Resources</span>
-                    </div>
-                    <Link 
-                      to="/support"
-                      className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
-                    >
-                      <span>Support</span>
-                    </Link>
-                    <Link 
-                      to="/blog"
-                      className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
-                    >
-                      <span>Blog</span>
-                    </Link>
-                    <Link 
-                      to="/faq"
-                      className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
-                    >
-                      <span>FAQ</span>
-                    </Link>
-                  </div>
-                  
                   {/* Profile */}
                   <Link 
                     to="/profile"
@@ -246,21 +210,14 @@ const Navbar = () => {
                         <span>Sign Out</span>
                       </Button>
                     ) : (
-                      <div className="flex flex-col gap-3">
-                        <Link to="/auth">
-                          <Button 
-                            className="w-full"
-                            variant="outline"
-                          >
-                            Sign In
-                          </Button>
-                        </Link>
-                        <Link to="/auth?tab=register">
-                          <Button className="w-full">
-                            Create Account
-                          </Button>
-                        </Link>
-                      </div>
+                      <Link to="/auth">
+                        <Button 
+                          className="w-full"
+                          variant="outline"
+                        >
+                          Sign In
+                        </Button>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -272,15 +229,6 @@ const Navbar = () => {
             {/* Desktop Navigation */}
             <NavigationMenu>
               <NavigationMenuList>
-                {/* Home */}
-                <NavigationMenuItem>
-                  <Link to="/">
-                    <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
-                      Home
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                
                 {/* Mock Interviews */}
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Mock Interviews</NavigationMenuTrigger>
@@ -333,24 +281,6 @@ const Navbar = () => {
                       </Link>
                       <Link to="/custom-assessments" className="block p-2 hover:bg-accent rounded-md">
                         Custom Assessments
-                      </Link>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                
-                {/* Resources */}
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[200px] p-2">
-                      <Link to="/support" className="block p-2 hover:bg-accent rounded-md">
-                        Support
-                      </Link>
-                      <Link to="/blog" className="block p-2 hover:bg-accent rounded-md">
-                        Blog
-                      </Link>
-                      <Link to="/faq" className="block p-2 hover:bg-accent rounded-md">
-                        FAQ
                       </Link>
                     </div>
                   </NavigationMenuContent>
@@ -408,22 +338,10 @@ const Navbar = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Link to="/auth">
-                    <Button variant="outline" size="sm">Sign In</Button>
-                  </Link>
-                  <Link to="/auth?tab=register">
-                    <Button size="sm">Create Account</Button>
-                  </Link>
-                </div>
+                <Link to="/auth">
+                  <Button variant="outline" size="sm">Sign In</Button>
+                </Link>
               )}
-              
-              {/* Primary CTA */}
-              <Link to="/mock-interviews" className="hidden md:block">
-                <Button variant="default" className="bg-gradient-to-r from-primary to-primary/80">
-                  Start Practicing Now
-                </Button>
-              </Link>
             </div>
           </div>
         )}
