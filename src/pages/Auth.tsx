@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Briefcase, User } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -16,29 +17,70 @@ export default function Auth() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [accountType, setAccountType] = useState<'individual' | 'company'>('individual');
   const [companyName, setCompanyName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleSignIn = async () => {
+    if (!email || !password) {
+      toast({
+        title: "Missing fields",
+        description: "Please enter both email and password.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsLoading(true);
     try {
       await signIn(email, password);
       navigate('/');
     } catch (error) {
       console.error('Authentication error:', error);
+      // Error is already handled in the AuthContext
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSignUp = async () => {
+    if (!email || !password || !confirmPassword) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure both passwords match.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (accountType === 'company' && !companyName) {
+      toast({
+        title: "Missing company name",
+        description: "Please enter your company name.",
+        variant: "destructive"
+      });
       return;
     }
     
+    setIsLoading(true);
     try {
       await signUp(email, password, accountType, accountType === 'company' ? companyName : undefined);
       navigate('/');
     } catch (error) {
       console.error('Authentication error:', error);
+      // Error is already handled in the AuthContext
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -83,8 +125,9 @@ export default function Auth() {
                 <Button 
                   className="w-full bg-gradient-to-r from-interview-blue to-interview-purple"
                   onClick={handleSignIn}
+                  disabled={isLoading}
                 >
-                  Sign In
+                  {isLoading ? "Signing In..." : "Sign In"}
                 </Button>
               </div>
             </TabsContent>
@@ -178,8 +221,9 @@ export default function Auth() {
                 <Button 
                   className="w-full bg-gradient-to-r from-interview-blue to-interview-purple"
                   onClick={handleSignUp}
+                  disabled={isLoading}
                 >
-                  Create Account
+                  {isLoading ? "Creating Account..." : "Create Account"}
                 </Button>
               </div>
             </TabsContent>
