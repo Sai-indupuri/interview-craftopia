@@ -5,9 +5,9 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
@@ -138,6 +138,12 @@ const Navbar = () => {
                     >
                       <span>Behavioral Interviews</span>
                     </Link>
+                    <Link 
+                      to="/company-mock-interviews"
+                      className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
+                    >
+                      <span>For Companies</span>
+                    </Link>
                   </div>
                   
                   {/* Coding Practice */}
@@ -164,6 +170,12 @@ const Navbar = () => {
                     >
                       <span>Custom Assessments</span>
                     </Link>
+                    <Link 
+                      to="/company-custom-assessments"
+                      className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
+                    >
+                      <span>For Companies</span>
+                    </Link>
                   </div>
                   
                   {/* Company Section */}
@@ -182,10 +194,16 @@ const Navbar = () => {
                       <span>Company Dashboard</span>
                     </Link>
                     <Link 
-                      to="/custom-assessments"
+                      to="/company-custom-assessments"
                       className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
                     >
                       <span>Custom Assessments</span>
+                    </Link>
+                    <Link 
+                      to="/company-mock-interviews"
+                      className="flex items-center gap-2 px-4 py-2 pl-10 text-sm text-muted-foreground hover:bg-muted rounded-md transition-colors"
+                    >
+                      <span>Mock Interviews</span>
                     </Link>
                   </div>
                   
@@ -233,7 +251,7 @@ const Navbar = () => {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Mock Interviews</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="w-[200px] p-2">
+                    <div className="w-[230px] p-2">
                       <Link to="/mock-interviews" className="block p-2 hover:bg-accent rounded-md">
                         All Mock Interviews
                       </Link>
@@ -242,6 +260,9 @@ const Navbar = () => {
                       </Link>
                       <Link to="/mock-interviews/behavioral" className="block p-2 hover:bg-accent rounded-md">
                         Behavioral Interviews
+                      </Link>
+                      <Link to="/company-mock-interviews" className="block p-2 hover:bg-accent rounded-md">
+                        <strong>For Companies</strong>
                       </Link>
                     </div>
                   </NavigationMenuContent>
@@ -260,12 +281,15 @@ const Navbar = () => {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Assessments</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="w-[200px] p-2">
+                    <div className="w-[230px] p-2">
                       <Link to="/assessments" className="block p-2 hover:bg-accent rounded-md">
                         All Assessments
                       </Link>
                       <Link to="/custom-assessments" className="block p-2 hover:bg-accent rounded-md">
                         Custom Assessments
+                      </Link>
+                      <Link to="/company-custom-assessments" className="block p-2 hover:bg-accent rounded-md">
+                        <strong>For Companies</strong>
                       </Link>
                     </div>
                   </NavigationMenuContent>
@@ -279,8 +303,11 @@ const Navbar = () => {
                       <Link to="/company-dashboard" className="block p-2 hover:bg-accent rounded-md">
                         Company Dashboard
                       </Link>
-                      <Link to="/custom-assessments" className="block p-2 hover:bg-accent rounded-md">
+                      <Link to="/company-custom-assessments" className="block p-2 hover:bg-accent rounded-md">
                         Custom Assessments
+                      </Link>
+                      <Link to="/company-mock-interviews" className="block p-2 hover:bg-accent rounded-md">
+                        Mock Interviews
                       </Link>
                     </div>
                   </NavigationMenuContent>

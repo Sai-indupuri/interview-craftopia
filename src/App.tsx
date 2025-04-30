@@ -19,6 +19,8 @@ import Auth from "./pages/Auth";
 import { AuthProvider } from "@/contexts/AuthContext";
 import CompanyProfile from "./pages/CompanyProfile";
 import CompanyDashboard from "./pages/CompanyDashboard";
+import CompanyCustomAssessments from "./pages/CompanyCustomAssessments";
+import CompanyMockInterviews from "./pages/CompanyMockInterviews";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,8 @@ const App = () => (
             <Route path="/custom-assessments" element={<CustomAssessments />} />
             <Route path="/company-profile" element={<CompanyProfile />} />
             <Route path="/company-dashboard" element={<CompanyDashboard />} />
+            <Route path="/company-custom-assessments" element={<CompanyCustomAssessments />} />
+            <Route path="/company-mock-interviews" element={<CompanyMockInterviews />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
