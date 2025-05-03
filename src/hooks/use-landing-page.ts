@@ -1,9 +1,7 @@
 
-import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Footer from './Footer';
 
-// Define routes where the footer should be displayed (landing pages)
+// Define routes that are landing/marketing pages
 const landingRoutes = [
   '/',
   '/mock-interviews-landing',
@@ -16,17 +14,9 @@ const landingRoutes = [
   '/privacy'
 ];
 
-const FooterWrapper = () => {
+export const useLandingPage = () => {
   const location = useLocation();
   
   // Check if current path is in the landing routes array
-  const shouldShowFooter = landingRoutes.includes(location.pathname);
-  
-  if (!shouldShowFooter) {
-    return null;
-  }
-  
-  return <Footer />;
+  return landingRoutes.includes(location.pathname);
 };
-
-export default FooterWrapper;

@@ -27,7 +27,6 @@ import CompanyMockInterviews from "./pages/CompanyMockInterviews";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import FooterWrapper from "./components/FooterWrapper";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +61,6 @@ const App = () => (
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <FooterWrapper />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
