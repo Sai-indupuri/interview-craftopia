@@ -24,6 +24,10 @@ import CompanyProfile from "./pages/CompanyProfile";
 import CompanyDashboard from "./pages/CompanyDashboard";
 import CompanyCustomAssessments from "./pages/CompanyCustomAssessments";
 import CompanyMockInterviews from "./pages/CompanyMockInterviews";
+import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import FooterWrapper from "./components/FooterWrapper";
 
 const queryClient = new QueryClient();
 
@@ -53,8 +57,12 @@ const App = () => (
             <Route path="/company-dashboard" element={<CompanyDashboard />} />
             <Route path="/company-custom-assessments" element={<CompanyCustomAssessments />} />
             <Route path="/company-mock-interviews" element={<CompanyMockInterviews />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FooterWrapper />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
