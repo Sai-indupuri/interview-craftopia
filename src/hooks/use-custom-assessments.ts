@@ -8,10 +8,24 @@ import {
   deleteCustomAssessment
 } from "@/lib/api/custom-assessments";
 import { toast } from "@/hooks/use-toast";
-import { Database } from "@/integrations/supabase/types";
+import { useAuth } from "@/contexts/AuthContext";
 
-type CustomAssessment = Database["public"]["Tables"]["custom_assessment_requests"]["Row"];
-type CustomAssessmentInput = Omit<Database["public"]["Tables"]["custom_assessment_requests"]["Insert"], "id" | "created_at" | "updated_at">;
+type CustomAssessment = {
+  id: string;
+  userId: string;
+  orgName: string;
+  domain: string;
+  description: string;
+  features?: string[];
+  contactEmail: string;
+  contactPhone?: string;
+  status?: string;
+  deliveryDate?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type CustomAssessmentInput = Omit<CustomAssessment, "id" | "createdAt" | "updatedAt" | "userId">;
 
 export function useCustomAssessments() {
   return useQuery({
@@ -30,9 +44,14 @@ export function useCustomAssessment(id: string | undefined) {
 
 export function useCreateCustomAssessment() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
-    mutationFn: (data: CustomAssessmentInput) => createCustomAssessmentRequest(data),
+    mutationFn: (data: CustomAssessmentInput) => 
+      createCustomAssessmentRequest({
+        ...data,
+        userId: user?.id || '',
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customAssessments"] });
       toast({

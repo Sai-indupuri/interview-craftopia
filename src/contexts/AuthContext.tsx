@@ -1,7 +1,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useToast } from '@/components/ui/use-toast';
-import { signIn, signUp, signOut, getCurrentUser, refreshToken } from '@/lib/api/authService';
+import { useToast } from '@/hooks/use-toast';
+import { signIn, signUp, signOut, getCurrentUser, refreshToken } from '@/lib/api/auth';
 
 interface User {
   id: string;

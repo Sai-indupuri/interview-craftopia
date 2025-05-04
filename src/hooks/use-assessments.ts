@@ -8,10 +8,21 @@ import {
   deleteAssessmentAttempt
 } from "@/lib/api/assessments";
 import { toast } from "@/hooks/use-toast";
-import { Database } from "@/integrations/supabase/types";
+import { useAuth } from "@/contexts/AuthContext";
 
-type AssessmentAttempt = Database["public"]["Tables"]["assessment_attempts"]["Row"];
-type AssessmentAttemptInput = Omit<Database["public"]["Tables"]["assessment_attempts"]["Insert"], "id" | "created_at">;
+type AssessmentAttempt = {
+  id: string;
+  userId: string;
+  categoryId: string;
+  assessmentTitle: string;
+  score?: number;
+  answers?: any;
+  startTime: string;
+  endTime?: string;
+  createdAt: string;
+};
+
+type AssessmentAttemptInput = Omit<AssessmentAttempt, "id" | "createdAt">;
 
 export function useAssessmentAttempts() {
   return useQuery({
@@ -30,9 +41,14 @@ export function useAssessmentAttempt(id: string | undefined) {
 
 export function useCreateAssessmentAttempt() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
-    mutationFn: (data: AssessmentAttemptInput) => createAssessmentAttempt(data),
+    mutationFn: (data: Omit<AssessmentAttemptInput, "userId">) => 
+      createAssessmentAttempt({
+        ...data,
+        userId: user?.id || '',
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["assessmentAttempts"] });
       toast({

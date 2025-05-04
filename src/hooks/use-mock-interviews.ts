@@ -9,10 +9,27 @@ import {
   submitInterviewFeedback
 } from "@/lib/api/mock-interviews";
 import { toast } from "@/hooks/use-toast";
-import { Database } from "@/integrations/supabase/types";
+import { useAuth } from "@/contexts/AuthContext";
 
-type MockInterview = Database["public"]["Tables"]["mock_interviews"]["Row"];
-type MockInterviewInput = Omit<Database["public"]["Tables"]["mock_interviews"]["Insert"], "id" | "created_at" | "updated_at">;
+type MockInterview = {
+  id: string;
+  userId: string;
+  title: string;
+  mode: string;
+  duration: string;
+  domain: string;
+  interviewType: string;
+  date: string;
+  jobDescription?: string;
+  resumeData?: string;
+  status: string;
+  score?: number;
+  feedback?: any;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type MockInterviewInput = Omit<MockInterview, "id" | "createdAt" | "updatedAt" | "userId">;
 
 export function useMockInterviews() {
   return useQuery({
@@ -31,9 +48,14 @@ export function useMockInterview(id: string | undefined) {
 
 export function useCreateMockInterview() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
-    mutationFn: (data: MockInterviewInput) => createMockInterview(data),
+    mutationFn: (data: MockInterviewInput) => 
+      createMockInterview({
+        ...data,
+        userId: user?.id || '',
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mockInterviews"] });
       toast({
