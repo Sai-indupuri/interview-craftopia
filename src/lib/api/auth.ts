@@ -121,3 +121,20 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     return null;
   }
 }
+
+// Add the missing refreshToken function
+export async function refreshToken(): Promise<string | null> {
+  try {
+    const { data, error } = await supabase.auth.refreshSession();
+    
+    if (error || !data.session) {
+      console.error("Error refreshing token:", error);
+      return null;
+    }
+    
+    return data.session.access_token;
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    return null;
+  }
+}
