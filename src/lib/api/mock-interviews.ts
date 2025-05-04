@@ -1,30 +1,44 @@
 
-import { api } from "./apiClient";
-import { Database } from "@/integrations/supabase/types";
+import { backend } from "./backendClient";
 
-type MockInterview = Database["public"]["Tables"]["mock_interviews"]["Row"];
-type MockInterviewInsert = Database["public"]["Tables"]["mock_interviews"]["Insert"];
+type MockInterview = {
+  id: string;
+  userId: string;
+  title: string;
+  mode: string;
+  duration: string;
+  domain: string;
+  interviewType: string;
+  date: string;
+  jobDescription?: string;
+  resumeData?: string;
+  status: string;
+  score?: number;
+  feedback?: any;
+  createdAt: string;
+  updatedAt: string;
+};
 
-export async function createMockInterview(interview: Omit<MockInterviewInsert, "id" | "created_at" | "updated_at">) {
-  return api.post<MockInterview>('interviews', interview);
+export async function createMockInterview(interview: Omit<MockInterview, "id" | "createdAt" | "updatedAt">) {
+  return backend.post<MockInterview>('interviews', interview);
 }
 
 export async function getUserMockInterviews() {
-  return api.get<MockInterview[]>('interviews');
+  return backend.get<MockInterview[]>('interviews');
 }
 
 export async function getMockInterview(id: string) {
-  return api.get<MockInterview>(`interviews/${id}`);
+  return backend.get<MockInterview>(`interviews/${id}`);
 }
 
 export async function updateMockInterview(id: string, updates: Partial<MockInterview>) {
-  return api.put<MockInterview>(`interviews/${id}`, updates);
+  return backend.put<MockInterview>(`interviews/${id}`, updates);
 }
 
 export async function deleteMockInterview(id: string) {
-  return api.delete<void>(`interviews/${id}`);
+  return backend.delete<void>(`interviews/${id}`);
 }
 
 export async function submitInterviewFeedback(id: string, feedback: any) {
-  return api.post<MockInterview>(`interviews/${id}/feedback`, { feedback });
+  return backend.post<MockInterview>(`interviews/${id}/feedback`, { feedback });
 }

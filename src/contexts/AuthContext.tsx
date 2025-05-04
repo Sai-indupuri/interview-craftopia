@@ -1,12 +1,18 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import { signIn, signUp, signOut, getCurrentUser, refreshToken } from '@/lib/api/authService';
+
+interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  accountType: 'individual' | 'company';
+}
 
 interface AuthContextType {
   user: User | null;
-  session: Session | null;
   signUp: (email: string, password: string, accountType: 'individual' | 'company', companyName?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -18,65 +24,65 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [accountType, setAccountType] = useState<'individual' | 'company' | null>(null);
   const { toast } = useToast();
 
+  // Set up auth token refresh
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.email);
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Get the account type from user metadata
-          const userAccountType = session.user.user_metadata?.account_type as 'individual' | 'company';
-          console.log('User account type:', userAccountType);
-          setAccountType(userAccountType || null);
-        } else {
-          setAccountType(null);
-        }
-        
-        setLoading(false);
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Initial session check:', session?.user?.email);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        // Get the account type from user metadata
-        const userAccountType = session.user.user_metadata?.account_type as 'individual' | 'company';
-        console.log('Initial user account type:', userAccountType);
-        setAccountType(userAccountType || null);
-      }
-      
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    const refreshInterval = 14 * 60 * 1000; // 14 minutes
+    
+    const refreshUserToken = async () => {
+      await refreshToken();
+    };
+    
+    const intervalId = setInterval(refreshUserToken, refreshInterval);
+    
+    return () => clearInterval(intervalId);
   }, []);
 
-  const signUp = async (email: string, password: string, accountType: 'individual' | 'company', companyName?: string) => {
+  // Check for user on initial load
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        setLoading(true);
+        const userData = await getCurrentUser();
+        
+        if (userData) {
+          setUser(userData);
+          setAccountType(userData.accountType);
+          console.log('User loaded:', userData.email, userData.accountType);
+        } else {
+          setUser(null);
+          setAccountType(null);
+        }
+      } catch (error) {
+        console.error('Error loading user:', error);
+        setUser(null);
+        setAccountType(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadUser();
+  }, []);
+
+  const handleSignUp = async (email: string, password: string, accountType: 'individual' | 'company', companyName?: string) => {
     try {
       console.log('Signing up:', email, accountType);
-      const { error } = await supabase.auth.signUp({ 
+      const response = await signUp({ 
         email, 
         password,
-        options: {
-          data: {
-            account_type: accountType,
-            company_name: companyName || null
-          }
-        }
+        firstName: '',
+        lastName: '',
+        accountType,
+        companyName
       });
-      if (error) throw error;
+      
+      setUser(response.user);
+      setAccountType(response.user.accountType);
+      
       toast({
         title: "Sign up successful!",
         description: "Your account has been created.",
@@ -92,11 +98,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signIn = async (email: string, password: string) => {
+  const handleSignIn = async (email: string, password: string) => {
     try {
       console.log('Signing in:', email);
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      const response = await signIn({ email, password });
+      
+      setUser(response.user);
+      setAccountType(response.user.accountType);
+      
       toast({
         title: "Welcome back!",
         description: "Successfully signed in.",
@@ -112,11 +121,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signOut = async () => {
+  const handleSignOut = async () => {
     try {
       console.log('Signing out');
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await signOut();
+      
+      setUser(null);
+      setAccountType(null);
+      
       toast({
         title: "Signed out",
         description: "Successfully signed out.",
@@ -135,10 +147,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={{ 
       user, 
-      session, 
-      signUp, 
-      signIn, 
-      signOut, 
+      signUp: handleSignUp, 
+      signIn: handleSignIn, 
+      signOut: handleSignOut, 
       loading,
       accountType
     }}>

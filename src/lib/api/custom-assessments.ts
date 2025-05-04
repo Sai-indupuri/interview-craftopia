@@ -1,13 +1,24 @@
 
-import { api } from "./apiClient";
-import { Database } from "@/integrations/supabase/types";
+import { backend } from "./backendClient";
 
-type CustomAssessment = Database["public"]["Tables"]["custom_assessment_requests"]["Row"];
-type CustomAssessmentInsert = Database["public"]["Tables"]["custom_assessment_requests"]["Insert"];
+type CustomAssessment = {
+  id: string;
+  userId: string;
+  orgName: string;
+  domain: string;
+  description: string;
+  features?: string[];
+  contactEmail: string;
+  contactPhone?: string;
+  status?: string;
+  deliveryDate?: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 // For regular custom assessment requests
-export async function createCustomAssessmentRequest(request: Omit<CustomAssessmentInsert, "id" | "created_at" | "updated_at">) {
-  return api.post<CustomAssessment>('custom-assessments', request);
+export async function createCustomAssessmentRequest(request: Omit<CustomAssessment, "id" | "createdAt" | "updatedAt">) {
+  return backend.post<CustomAssessment>('custom-assessments', request);
 }
 
 // For company-specific assessment programs
@@ -26,38 +37,38 @@ export interface CompanyAssessmentProgram {
 }
 
 export async function createCompanyAssessmentProgram(program: Omit<CompanyAssessmentProgram, "id" | "createdAt" | "updatedAt">) {
-  return api.post<CompanyAssessmentProgram>('company/assessment-programs', program);
+  return backend.post<CompanyAssessmentProgram>('company/assessment-programs', program);
 }
 
 export async function getCompanyAssessmentPrograms() {
-  return api.get<CompanyAssessmentProgram[]>('company/assessment-programs');
+  return backend.get<CompanyAssessmentProgram[]>('company/assessment-programs');
 }
 
 export async function getCompanyAssessmentProgram(id: string) {
-  return api.get<CompanyAssessmentProgram>(`company/assessment-programs/${id}`);
+  return backend.get<CompanyAssessmentProgram>(`company/assessment-programs/${id}`);
 }
 
 export async function updateCompanyAssessmentProgram(id: string, updates: Partial<CompanyAssessmentProgram>) {
-  return api.put<CompanyAssessmentProgram>(`company/assessment-programs/${id}`, updates);
+  return backend.put<CompanyAssessmentProgram>(`company/assessment-programs/${id}`, updates);
 }
 
 export async function deleteCompanyAssessmentProgram(id: string) {
-  return api.delete<void>(`company/assessment-programs/${id}`);
+  return backend.delete<void>(`company/assessment-programs/${id}`);
 }
 
 // The original custom assessment functions
 export async function getUserCustomAssessments() {
-  return api.get<CustomAssessment[]>('custom-assessments');
+  return backend.get<CustomAssessment[]>('custom-assessments');
 }
 
 export async function getCustomAssessment(id: string) {
-  return api.get<CustomAssessment>(`custom-assessments/${id}`);
+  return backend.get<CustomAssessment>(`custom-assessments/${id}`);
 }
 
 export async function updateCustomAssessment(id: string, updates: Partial<CustomAssessment>) {
-  return api.put<CustomAssessment>(`custom-assessments/${id}`, updates);
+  return backend.put<CustomAssessment>(`custom-assessments/${id}`, updates);
 }
 
 export async function deleteCustomAssessment(id: string) {
-  return api.delete<void>(`custom-assessments/${id}`);
+  return backend.delete<void>(`custom-assessments/${id}`);
 }

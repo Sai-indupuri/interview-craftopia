@@ -1,26 +1,34 @@
 
-import { api } from "./apiClient";
-import { Database } from "@/integrations/supabase/types";
+import { backend } from "./backendClient";
 
-type AssessmentAttempt = Database["public"]["Tables"]["assessment_attempts"]["Row"];
-type AssessmentAttemptInsert = Database["public"]["Tables"]["assessment_attempts"]["Insert"];
+type AssessmentAttempt = {
+  id: string;
+  userId: string;
+  categoryId: string;
+  assessmentTitle: string;
+  score?: number;
+  answers?: any;
+  startTime: string;
+  endTime?: string;
+  createdAt: string;
+};
 
-export async function createAssessmentAttempt(attempt: Omit<AssessmentAttemptInsert, "id" | "created_at">) {
-  return api.post<AssessmentAttempt>('assessments/attempts', attempt);
+export async function createAssessmentAttempt(attempt: Omit<AssessmentAttempt, "id" | "createdAt">) {
+  return backend.post<AssessmentAttempt>('assessments/attempts', attempt);
 }
 
 export async function getUserAssessmentAttempts() {
-  return api.get<AssessmentAttempt[]>('assessments/attempts');
+  return backend.get<AssessmentAttempt[]>('assessments/attempts');
 }
 
 export async function getAssessmentAttempt(id: string) {
-  return api.get<AssessmentAttempt>(`assessments/attempts/${id}`);
+  return backend.get<AssessmentAttempt>(`assessments/attempts/${id}`);
 }
 
 export async function updateAssessmentAttempt(id: string, updates: Partial<AssessmentAttempt>) {
-  return api.put<AssessmentAttempt>(`assessments/attempts/${id}`, updates);
+  return backend.put<AssessmentAttempt>(`assessments/attempts/${id}`, updates);
 }
 
 export async function deleteAssessmentAttempt(id: string) {
-  return api.delete<void>(`assessments/attempts/${id}`);
+  return backend.delete<void>(`assessments/attempts/${id}`);
 }

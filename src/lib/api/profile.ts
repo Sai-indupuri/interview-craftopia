@@ -1,8 +1,21 @@
 
-import { api } from "./apiClient";
-import { Database } from "@/integrations/supabase/types";
+import { backend } from "./backendClient";
 
-type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+type Profile = {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  company?: string;
+  roleTitle?: string;
+  aspiringRole?: string;
+  education?: string;
+  skills?: string;
+  domain?: string;
+  experience?: string;
+  about?: string;
+};
+
 type CompanyProfile = {
   id: string;
   companyName: string;
@@ -17,26 +30,28 @@ type CompanyProfile = {
 };
 
 export async function getUserProfile() {
-  return api.get<Profile>('profile');
+  return backend.get<Profile>('profiles/user');
 }
 
 export async function getCompanyProfile() {
-  return api.get<CompanyProfile>('company-profile');
+  return backend.get<CompanyProfile>('profiles/company');
 }
 
 export async function updateUserProfile(updates: Partial<Profile>) {
-  return api.put<Profile>('profile', updates);
+  return backend.put<Profile>('profiles/user', updates);
 }
 
 export async function updateCompanyProfile(updates: Partial<CompanyProfile>) {
-  return api.put<CompanyProfile>('company-profile', updates);
+  return backend.put<CompanyProfile>('profiles/company', updates);
 }
 
 export async function uploadProfileImage(file: File) {
   const formData = new FormData();
   formData.append('image', file);
   
-  return fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api"}/profile/image`, {
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000/api";
+  
+  return fetch(`${API_BASE_URL}/profiles/user/image`, {
     method: 'POST',
     body: formData,
     headers: {
@@ -49,7 +64,9 @@ export async function uploadCompanyLogo(file: File) {
   const formData = new FormData();
   formData.append('logo', file);
   
-  return fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api"}/company-profile/logo`, {
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000/api";
+  
+  return fetch(`${API_BASE_URL}/profiles/company/logo`, {
     method: 'POST',
     body: formData,
     headers: {
